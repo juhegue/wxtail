@@ -300,7 +300,7 @@ class Pagina(wx.Panel):
         
         lineas = self.txt2.GetNumberOfLines()
         if lineas > MAX_LINEAS:
-            self.txt2.Remove(0, lineas - MAXLINEAS)
+            self.txt2.Remove(0, lineas - MAX_LINEAS)
 
         try:
             self.txt2.SetDefaultStyle(wx.TextAttr(color, wx.NullColour))
