@@ -9,6 +9,7 @@ import wx.lib.newevent
 import thread
 import datetime
 
+MAX_LINEAS=500
 LINEAS_DEFECTO=10           # 0 es todo el fichero
 SLEEP_TIME=0.5              # tiempo refresco de la actualizacion / tiempo de espera para finalizar
 NOMBRE_APLICACION='wxtail'
@@ -296,12 +297,18 @@ class Pagina(wx.Panel):
         self.SetActualizado(True)
         
         self.txt2.Freeze()
+        
+        lineas = self.txt2.GetNumberOfLines()
+        if lineas > MAX_LINEAS:
+            self.txt2.Remove(0, lineas - MAXLINEAS)
+
         try:
             self.txt2.SetDefaultStyle(wx.TextAttr(color, wx.NullColour))
             self.txt2.AppendText(texto.decode('utf-8', 'ignore'))                    
         except UnicodeDecodeError, detalle:
             self.txt2.SetDefaultStyle(wx.TextAttr("RED", wx.NullColour))
-            self.txt2.AppendText(u"%s\n" % detalle)            
+            self.txt2.AppendText(u"%s\n" % detalle)           
+             
         self.txt2.Thaw()
 
     def GetActualizado(self):
