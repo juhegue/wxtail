@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=wxtail
+Comment=wxtail
+Exec=/usr/bin/python /home/juan/bin/wxtail.py
+Icon=/home/juan/bin/wxtail.png
+Terminal=false
+Type=Application
+StartupNotify=true
