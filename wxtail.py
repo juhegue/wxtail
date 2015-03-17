@@ -1,17 +1,18 @@
 #!/usr/bin/env python
-# -*- coding: cp1252 -*-
+# -*- coding: utf8 -*-
 #Juan Hevilla Guerrero 12/06/2008.
 
-import wx, sys, os, string, time
+import os
+import time
 import wx.lib.buttons as buttons
 from wx.lib.wordwrap import wordwrap
 import wx.lib.newevent
 import thread
-import datetime
 
-MAX_LINEAS=500
+
+MAX_LINEAS=5000
 LINEAS_DEFECTO=10           # 0 es todo el fichero
-SLEEP_TIME=0.5              # tiempo refresco de la actualizacion / tiempo de espera para finalizar
+SLEEP_TIME=0.5              # tiempo refresco de la actualizaci√≥n / tiempo de espera para finalizar
 NOMBRE_APLICACION='wxtail'
 SIZE_FONT=13
 
@@ -65,7 +66,7 @@ def GetTailData(fichero, lineas):
             try: 
                 fichero.seek(-1 * caracterLinea * lineas,2)
             except IOError: 
-				fichero.seek(0) 
+                fichero.seek(0) 
                 
             ficIni = 1 if fichero.tell() == 0 else 0
 
@@ -103,11 +104,11 @@ class TailHilo:
         return self.corriendo
 
     def PosFinalFichero(self):
-		pos = self.fichero.tell()
-		self.fichero.seek(0,2)
-		fin = self.fichero.tell()
-		self.fichero.seek(pos)
-		return fin
+        pos = self.fichero.tell()
+        self.fichero.seek(0,2)
+        fin = self.fichero.tell()
+        self.fichero.seek(pos)
+        return fin
 
     def Corre(self):
         self.fichero.seek(self.win.lonFicIni)        
@@ -375,7 +376,7 @@ class Pagina(wx.Panel):
             self.fichero = None
 
     def Marca(self, pagina):
-        data = self.txt2.GetValue()
+        #data = self.txt2.GetValue()
         pos = self.txt2.GetLastPosition()
         self.txt2.SetStyle(0, pos, wx.TextAttr("BLUE", wx.NullColour))
         self.parent.SetPageText(pagina, os.path.basename(self.nomFichero))
@@ -433,7 +434,7 @@ class Notebook(wx.Notebook):
             self.DeletePage(self.CogePagActual())
 
     def BorraTodasPaginas(self):
-        busy = wx.BusyInfo("Un momento, miestras mueren los hilos...")
+        wx.BusyInfo("Un momento, miestras mueren los hilos...")
         wx.Yield()
 
         for i in range(self.GetPageCount()):
@@ -465,9 +466,9 @@ class Notebook(wx.Notebook):
                 pagina.SetActualizado(False)
                 #actualiza estado fichero
                 pagina.EstadoFichero()
-                #actualiza la pestaÒa
+                #actualiza la pesta√±a
                 txt = self.GetPageText(i)
-                if txt[0] <> '*': self.SetPageText(i, "*%s" % txt)
+                if txt[0] != '*': self.SetPageText(i, "*%s" % txt)
                 #actualiza barra de estado
                 self.Info("Actualiza: %s" % pagina.nomFichero)
                 #posiciona
@@ -513,7 +514,7 @@ class Frame(wx.Frame):
         #redireccion de stdio y stderr a una ventana
         app = wx.GetApp()
         app.RedirectStdio()        
-        #timer de actualizaciÛn
+        #timer de actualizaci√≥n
         self.timer = wx.PyTimer(self.Temporizador)
         self.timer.Start(1000*SLEEP_TIME*2)
         self.Temporizador()         
@@ -542,14 +543,14 @@ class Frame(wx.Frame):
         self.tb.AddLabelTool(self.tbID1, "Salir", bmp1, shortHelp="Salir", longHelp="Cierra la ventana")
         self.tb.AddSeparator()
         bmp2 = wx.ArtProvider_GetBitmap(wx.ART_NEW, wx.ART_OTHER, (16,16))
-        self.tb.AddLabelTool(self.tbID2, "Nuevo", bmp2, shortHelp="Nuevo", longHelp=u"AÒade p·gina al visor")
+        self.tb.AddLabelTool(self.tbID2, "Nuevo", bmp2, shortHelp="Nuevo", longHelp=u"A√±ade p√°gina al visor")
         self.tb.AddSeparator()
         bmp3 = wx.ArtProvider_GetBitmap(wx.ART_DELETE, wx.ART_OTHER, (16,16))
-        self.tb.AddLabelTool(self.tbID3, "Cerrar todo", bmp3, shortHelp="Cerrar todo", longHelp=u"Cierra todas las p·ginas")
+        self.tb.AddLabelTool(self.tbID3, "Cerrar todo", bmp3, shortHelp="Cerrar todo", longHelp=u"Cierra todas las p√°ginas")
         bmp4 = wx.ArtProvider_GetBitmap(wx.ART_TICK_MARK, wx.ART_OTHER, (16,16))
-        self.tb.AddLabelTool(self.tbID4, "Marca todo", bmp4, shortHelp="Marca todo", longHelp=u"Marca texto de todas las p·ginas como leido")
+        self.tb.AddLabelTool(self.tbID4, "Marca todo", bmp4, shortHelp="Marca todo", longHelp=u"Marca texto de todas las p√°ginas como leido")
         bmp5 = wx.ArtProvider_GetBitmap(wx.ART_REDO, wx.ART_OTHER, (16,16))
-        self.tb.AddLabelTool(self.tbID5, "Recargar todo", bmp5, shortHelp="Recargar todo", longHelp=u"Vuelve a cargar el fichero de todas las p·ginas")
+        self.tb.AddLabelTool(self.tbID5, "Recargar todo", bmp5, shortHelp="Recargar todo", longHelp=u"Vuelve a cargar el fichero de todas las p√°ginas")
         self.tb.AddSeparator()
 
         bmp6 = wx.ArtProvider_GetBitmap(wx.ART_FIND, wx.ART_OTHER, (16,16))
@@ -587,17 +588,17 @@ class Frame(wx.Frame):
         
         menu = wx.Menu()
 
-        item1 = wx.MenuItem(menu, self.menuID1,"&Nuevo", u"AÒade p·gina al visor")
+        item1 = wx.MenuItem(menu, self.menuID1,"&Nuevo", u"A√±ade p√°gina al visor")
         bmp1 = wx.ArtProvider_GetBitmap(wx.ART_NEW, wx.ART_OTHER, (16,16))
         item1.SetBitmap(bmp1)
         menu.AppendItem(item1)
 
-        item2 = wx.MenuItem(menu, self.menuID2,"&Abrir", u"Abre fichero en la p·gina actual")
+        item2 = wx.MenuItem(menu, self.menuID2,"&Abrir", u"Abre fichero en la p√°gina actual")
         bmp2 = wx.ArtProvider_GetBitmap(wx.ART_FILE_OPEN, wx.ART_OTHER, (16,16))
         item2.SetBitmap(bmp2)
         menu.AppendItem(item2)
 
-        item3 = wx.MenuItem(menu, self.menuID3,"&Cerrar", u"Cierra p·gina actual")
+        item3 = wx.MenuItem(menu, self.menuID3,"&Cerrar", u"Cierra p√°gina actual")
         bmp3 = wx.ArtProvider_GetBitmap(wx.ART_DELETE, wx.ART_OTHER, (16,16))
         item3.SetBitmap(bmp3)
         menu.AppendItem(item3)
@@ -616,17 +617,17 @@ class Frame(wx.Frame):
 
         menu.AppendSeparator()
         
-        item6 = wx.MenuItem(menu, self.menuID6,"&Cerrar todo", u"Cierra todas las p·ginas")
+        item6 = wx.MenuItem(menu, self.menuID6,"&Cerrar todo", u"Cierra todas las p√°ginas")
         bmp6 = wx.ArtProvider_GetBitmap(wx.ART_DELETE, wx.ART_OTHER, (16,16))
         item6.SetBitmap(bmp6)
         menu.AppendItem(item6)
 
-        item7 = wx.MenuItem(menu, self.menuID7,"&Marca todo", u"Marca texto de todas las p·ginas como leido")
+        item7 = wx.MenuItem(menu, self.menuID7,"&Marca todo", u"Marca texto de todas las p√°ginas como leido")
         bmp7 = wx.ArtProvider_GetBitmap(wx.ART_TICK_MARK, wx.ART_OTHER, (16,16))
         item7.SetBitmap(bmp7)
         menu.AppendItem(item7)
 
-        item8 = wx.MenuItem(menu, self.menuID8,"&Recargar todo", u"Vuelve a cargar el fichero de todas las p·ginas")
+        item8 = wx.MenuItem(menu, self.menuID8,"&Recargar todo", u"Vuelve a cargar el fichero de todas las p√°ginas")
         bmp8 = wx.ArtProvider_GetBitmap(wx.ART_REDO, wx.ART_OTHER, (16,16))
         item8.SetBitmap(bmp8)
         menu.AppendItem(item8)
@@ -732,14 +733,14 @@ class Frame(wx.Frame):
         info = wx.AboutDialogInfo()
         info.Name = NOMBRE_APLICACION
         info.Version = "0.0.1"
-        info.Copyright = u"(C) 2008 Software de dominio p˙blico"
+        info.Copyright = u"(C) 2008 Software de dominio p√∫blico"
         info.Description = wordwrap(
-            u"\nEste progama es un tail gr·fico."
+            u"\nEste progama es un tail gr√°fico."
             
             "\n\n(Un ejemplo de thread.)\n",
             350, wx.ClientDC(self))
-        info.WebSite = ("http://es.wikipedia.org/wiki/Tail", u"DefiniciÛn")
-        info.Developers = [ u"Juan Hevilla Guerreo (CoÌn, M·laga, EspaÒa)", ]        
+        info.WebSite = ("http://es.wikipedia.org/wiki/Tail", u"Definici√≥n")
+        info.Developers = [ u"Juan Hevilla Guerreo (Co√≠n, M√°laga, Espa√±a)", ]        
         #info.License = wordwrap(licenciaTxt, 500, wx.ClientDC(self))
 
         wx.AboutBox(info)
@@ -813,7 +814,7 @@ class Frame(wx.Frame):
             self.notebook.Refresca()
 
     def __del__(self):
-        self.timer.stop()
+        self.timer.Stop()
         del self.timer
 
 
