@@ -308,7 +308,7 @@ class Pagina(wx.Panel):
 
         try:
             self.txt2.SetDefaultStyle(wx.TextAttr(color, wx.NullColour))
-            self.txt2.AppendText(texto.decode('utf-8', 'ignore'))
+            self.txt2.AppendText(texto)
         except UnicodeDecodeError as detalle:
             self.txt2.SetDefaultStyle(wx.TextAttr("RED", wx.NullColour))
             self.txt2.AppendText(u"%s\n" % detalle)
@@ -735,15 +735,14 @@ class Frame(wx.Frame):
         self.Close()
 
     def OnAcerca(self, event):
+        fic = os.path.join(GetDataDir(), NOMBRE_APLICACION)
         info = wx.adv.AboutDialogInfo()
         info.Name = NOMBRE_APLICACION
         info.Version = "0.0.1"
-        info.Copyright = u"(C) 2008 Software de dominio público"
+        info.Copyright = "(C) 2008 Software de dominio público"
         info.Description = wordwrap(
-            u"\nEste progama es un tail gráfico."
-
-            "\n\n(Un ejemplo de thread.)\n",
-            350, wx.ClientDC(self))
+            f"\nTail Gráfico.\n\n\n(Configuración {fic})\n", 350,
+            wx.ClientDC(self))
         info.WebSite = ("http://es.wikipedia.org/wiki/Tail", u"Definición")
         info.Developers = [ u"Juhegue (Coín, Málaga, España)", ]
         #info.License = wordwrap(licenciaTxt, 500, wx.ClientDC(self))
